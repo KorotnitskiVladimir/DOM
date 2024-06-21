@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="add_to_end" type="radio" name="task" value="add_to_end"> <label for="add_to_end">Добавить элемент в конец списка</label>
+    <input id="add" type="text"> <br>
+
+    <input type="radio" name="task" id="insert_element" value="insert_element"> <label for="insert_element">Вставить элемент списка</label>
+    <input type="text" id="insert"> <br>
+
+    <input type="radio" id="edit_text" name="task" value="edit_text"> <label for="edit_text">Изменить текст элемента списка</label>
+    <input type="text" id="edit"> <br>
+
+    <input type="radio" id="add_inner_list" name="task" value="add_inner_list"> <label for="add_inner_list">Добавить вложенный список</label>
+    <input type="text" id="add_list"> <br>
+
+    <input type="radio" id="delete_element" name="task" value="delete_element"> <label for="delete_element">Удалить элемент списка</label>
+    <input type="text" id="delete"><br>
+
+    <button id="main_button">Добавить новый список</button>
+
+    <div class="container"></div>
+
+    <script>
+        let controlBtn = document.querySelector('#main_button');
+        controlBtn.addEventListener("click", () => {
+            let container = document.querySelector('.container');
+            let ul = document.createElement('ul');
+            container.append(ul);
+            let li = document.createElement('li');
+            li.innerHTML = "first element";
+            ul.append(li);
+            clickFunction(li);
+        });
+
+        function clickFunction(element)
+        {
+            element.addEventListener("click", () => {
+                let radios = document.querySelector('input[name="task"]:checked').value
+                switch(radios)
+                {
+                    case "add_to_end":
+                        addToEnd(element);
+                        break;
+                    case "insert_element":
+                        insertEl(element);
+                        break;
+                    case "edit_text":
+                        editElement(element);
+                        break;
+                    case "add_inner_list":
+                        addList(element);
+                        break;
+                    case "delete_element":
+                        deleteElement(element);
+                }
+            })
+            event.stopPropagation();
+        }
+
+        function editElement(element)
+        {
+            let text = document.querySelector('#edit').value;
+            element.innerHTML = text;
+            event.stopPropagation();
+        }
+
+        function addToEnd(element)
+        {
+            let elem = document.createElement('li');
+            let text = document.querySelector('#add').value;
+            elem.innerHTML = text;
+            let parent = element.parentElement;
+            parent.append(elem);
+            clickFunction(elem);
+        }
+
+        function insertEl(element)
+        {
+            let elem = document.createElement('li');
+            let text = document.querySelector('#insert').value;
+            elem.innerHTML = text;
+            let parent = element.parentElement;
+            parent.insertBefore(elem, element);
+            clickFunction(elem);
+        }
+
+        function addList(element)
+        {
+            if (element.childElementCount == 0)
+            {
+                let ul = document.createElement('ul');
+                let li = document.createElement('li');
+                let text = document.querySelector('#add_list').value;
+                li.innerHTML = text;
+                ul.append(li);
+                element.append(ul);
+                clickFunction(li);
+            }
+        }
+
+        function deleteElement(element)
+        {
+            let parent = element.parentElement;
+            parent.removeChild(element);
+            event.stopPropagation();
+        }
+        
+        //document.querySelectorAll("#lists li").forEach(clickFunction);
+    </script>
+</body>
+</html>
